@@ -1,19 +1,53 @@
 
-def print_todos(todos):
+def print_todos(todos, completed_list, pending_list):
+    
+    pending = '''
+    ======= Pending ======
+    '''
+    completed = '''
+    ======= Completed ======
+    '''
+    
     if len(todos) == 0:
         print("You have nothing to do.")
+
     else:
-        i = 0
-        for todo in todos:
-            print(f"{i}: {todo}")
-            i += 1
+         
+
+        print(pending)
+        for i, pending in enumerate(pending_list):
+            print(f"{i}: {pending['title']}")
+
+        print(completed)
+        for i, completed in enumerate(completed_list):
+            print(f"{i}: {completed['title']}")
+
+def split_list(todos):
+    completed_list = []
+    pending_list = []
+    for todo in todos:
+        if todo['completed'] == True:
+            completed_list.append(todo)
+        else:
+            pending_list.append(todo)
+        
+    return completed_list, pending_list
+
 
 def add_todo(todos, item):
-    todos.append(item)
 
-def delete_todo(todos, index):
+
+    dict_entry = {'title': item,'completed': False}
+    todos.append(dict_entry)
+   
+  
+
+def change_status(todos, index):
     try:
-        del todos[index]
+        todos[index]['completed'] = True
+            
+       
+        
     except IndexError:
         print("That todo does not exist.")
 
@@ -51,13 +85,14 @@ def main():
             print("K. Byeeee!")
             is_running = False
         elif choice == 1:
-            print_todos(todo_list)
+            print_todos(todo_list, completed_list, pending_list)
         elif choice == 2:
             new_todo = input("Enter a todo: ")
             add_todo(todo_list, new_todo)
         elif choice == 3:            
-            index_to_delete = get_choice("Enter the index to complete: ")
-            delete_todo(todo_list, index_to_delete)
-        
+            index = get_choice("Enter the index to complete: ")
+            change_status(todo_list, index)
+    return todo_list
 
-main()
+todo_list = main()
+
